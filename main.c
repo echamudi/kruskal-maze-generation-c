@@ -36,6 +36,50 @@ const int MAZE_SIZE = 4;
 
 int ** maze_draft;
 
+void print_direction(int code) {
+    switch (code) {
+        case TOP_LEFT:
+            printf("top left");
+            break;
+        case TOP:
+            printf("top");
+            break;
+        case TOP_RIGHT:
+            printf("top right");
+            break;
+        case RIGHT_TOP:
+            printf("right top");
+            break;
+        case RIGHT:
+            printf("right");
+            break;
+        case RIGHT_BOTTOM:
+            printf("right bottom");
+            break;
+        case BOTTOM_RIGHT:
+            printf("bottom right");
+            break;
+        case BOTTOM:
+            printf("bottom");
+            break;
+        case BOTTOM_LEFT:
+            printf("bottom left");
+            break;
+        case LEFT_BOTTOM:
+            printf("left bottom");
+            break;
+        case LEFT:
+            printf("left");
+            break;
+        case LEFT_TOP:
+            printf("left top");
+            break;
+        default:
+            printf("ERROR: wrong code");
+            break;
+    }
+}
+
 void print_maze_draft() {
     // Print maze_draft
     printf("Current maze draft:\n");
@@ -235,7 +279,9 @@ int ** maze() {
     
         printf("Available directions:\n");
         for(int i = 1; i < directions[0] + 1; i++) {
-            printf("  -> %d\n", directions[i]);
+            printf(" -> ");
+            print_direction(directions[i]);
+            printf("\n");
         }
         
         free(directions);
@@ -311,7 +357,10 @@ int ** maze() {
             }
         }
 
-        printf("Selected direction: %d;\n", selected_direction);
+        printf("Selected direction: ");
+        print_direction(selected_direction);
+        printf("\n");
+        
         if (is_diagonal) {
             printf("All nodes: (%d, %d), (%d, %d), and (%d, %d);\n", x1, y1, x2, y2, x3, y3);
         } else {
@@ -413,6 +462,9 @@ int ** maze() {
         printf("\n");
     }
     
+    // FREE
+    for(int i = 0; i < MAZE_SIZE; i++)
+        free(maze_draft[i]);
     free(maze_draft);
     
     return graph;
