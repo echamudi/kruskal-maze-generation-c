@@ -41,7 +41,7 @@
 		72A7A0ED23917E6F00217BB1 = {
 			isa = PBXGroup;
 			children = (
-				72A7A0F823917E6F00217BB1 /* kruskal-maze-generation-c */,
+				72A7A0F923917E6F00217BB1 /* main.c */,
 				72A7A0F723917E6F00217BB1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -52,14 +52,6 @@
 				72A7A0F623917E6F00217BB1 /* kruskal-maze-generation-c */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		72A7A0F823917E6F00217BB1 /* kruskal-maze-generation-c */ = {
-			isa = PBXGroup;
-			children = (
-				72A7A0F923917E6F00217BB1 /* main.c */,
-			);
-			path = "kruskal-maze-generation-c";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
