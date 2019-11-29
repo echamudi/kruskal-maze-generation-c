@@ -213,22 +213,22 @@ int ** maze() {
             printf("DONE!\n\n");
 
             // Print graph
-//            printf("Final graph:\n");
-//            printf("\t");
-//            for (int i = 0; i < total_nodes; i++) {
-//                printf("%d\t", i);
-//            }
-//            printf("\n");
-//
-//            for (int x = 0; x < total_nodes; x++) {
-//                printf("%d\t", x);
-//
-//                for (int y = 0; y < total_nodes; y++) {
-//                    printf("%d\t", graph[x][y]);
-//                }
-//                printf("\n");
-//            }
-//            printf("\n");
+            printf("Final graph:\n");
+            printf("\t");
+            for (int i = 0; i < total_nodes; i++) {
+                printf("%d\t", i);
+            }
+            printf("\n");
+
+            for (int x = 0; x < total_nodes; x++) {
+                printf("%d\t", x);
+
+                for (int y = 0; y < total_nodes; y++) {
+                    printf("%d\t", graph[x][y]);
+                }
+                printf("\n");
+            }
+            printf("\n");
 
             // Print all connections
             printf("All connections:\n");
