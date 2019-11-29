@@ -25,6 +25,8 @@
 /* Begin PBXFileReference section */
 		72A7A0F623917E6F00217BB1 /* kruskal-maze-generation-c */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "kruskal-maze-generation-c"; sourceTree = BUILT_PRODUCTS_DIR; };
 		72A7A0F923917E6F00217BB1 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		72C041A7239199DD00A873B8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		72C041A823919B6900A873B8 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +43,8 @@
 		72A7A0ED23917E6F00217BB1 = {
 			isa = PBXGroup;
 			children = (
+				72C041A823919B6900A873B8 /* LICENSE */,
+				72C041A7239199DD00A873B8 /* README.md */,
 				72A7A0F923917E6F00217BB1 /* main.c */,
 				72A7A0F723917E6F00217BB1 /* Products */,
 			);
