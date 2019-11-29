@@ -36,8 +36,27 @@ const int MAZE_SIZE = 4;
 
 int ** maze_draft;
 
-bool three_equality(int x, int y, int z) {
-    bool result = (x == y) && (y == z) && (z == x);
+void print_maze_draft() {
+    // Print maze_draft
+    printf("Current maze draft:\n");
+    printf("\t");
+
+    for (int i = 0; i < MAZE_SIZE; i++) {
+        printf("%d\t", i);
+    }
+    printf("\n");
+
+    for (int x = 0; x < MAZE_SIZE; x++) {
+        printf("%d\t", x);
+        for (int y = 0; y < MAZE_SIZE; y++) {
+            printf("%d\t", maze_draft[y][x]);
+        }
+        printf("\n");
+    }
+}
+
+bool all_unique(int x, int y, int z) {
+    bool result = (x != y) && (y != z) && (z != x);
     return result;
 }
 
@@ -54,7 +73,7 @@ unsigned char * available_directions(int x, int y) {
     // Check top left
     if (!near_top_border
         && !near_left_border
-        && three_equality(maze_draft[x][y], maze_draft[x][y - 1], maze_draft[x - 1][y - 1])) {
+        && all_unique(maze_draft[x][y], maze_draft[x][y - 1], maze_draft[x - 1][y - 1])) {
         legality[TOP_LEFT] = true;
         legality_counter++;
     }
@@ -68,7 +87,7 @@ unsigned char * available_directions(int x, int y) {
     // Check top right
     if (!near_top_border
         && !near_right_border
-        && three_equality(maze_draft[x][y], maze_draft[x][y - 1], maze_draft[x + 1][y - 1])) {
+        && all_unique(maze_draft[x][y], maze_draft[x][y - 1], maze_draft[x + 1][y - 1])) {
         legality[TOP_RIGHT] = true;
         legality_counter++;
     }
@@ -76,7 +95,7 @@ unsigned char * available_directions(int x, int y) {
     // Check right top
     if (!near_right_border
         && !near_top_border
-        && three_equality(maze_draft[x][y], maze_draft[x + 1][y], maze_draft[x + 1][y - 1])) {
+        && all_unique(maze_draft[x][y], maze_draft[x + 1][y], maze_draft[x + 1][y - 1])) {
         legality[RIGHT_TOP] = true;
         legality_counter++;
     }
@@ -90,7 +109,7 @@ unsigned char * available_directions(int x, int y) {
     // Check right bottom
     if (!near_right_border
         && !near_bottom_border
-        && three_equality(maze_draft[x][y], maze_draft[x + 1][y], maze_draft[x + 1][y + 1])) {
+        && all_unique(maze_draft[x][y], maze_draft[x + 1][y], maze_draft[x + 1][y + 1])) {
         legality[RIGHT_BOTTOM] = true;
         legality_counter++;
     }
@@ -98,7 +117,7 @@ unsigned char * available_directions(int x, int y) {
     // Check bottom right
     if (!near_bottom_border
         && !near_right_border
-        && three_equality(maze_draft[x][y], maze_draft[x][y + 1], maze_draft[x + 1][y + 1])) {
+        && all_unique(maze_draft[x][y], maze_draft[x][y + 1], maze_draft[x + 1][y + 1])) {
         legality[BOTTOM_RIGHT] = true;
         legality_counter++;
     }
@@ -112,7 +131,7 @@ unsigned char * available_directions(int x, int y) {
     // Check bottom left
     if (!near_bottom_border
         && !near_left_border
-        && three_equality(maze_draft[x][y], maze_draft[x][y + 1], maze_draft[x - 1][y + 1])) {
+        && all_unique(maze_draft[x][y], maze_draft[x][y + 1], maze_draft[x - 1][y + 1])) {
         legality[BOTTOM_LEFT] = true;
         legality_counter++;
     }
@@ -120,7 +139,7 @@ unsigned char * available_directions(int x, int y) {
     // Check left bottom
     if (!near_left_border
         && !near_bottom_border
-        && three_equality(maze_draft[x][y], maze_draft[x - 1][y], maze_draft[x - 1][y + 1])) {
+        && all_unique(maze_draft[x][y], maze_draft[x - 1][y], maze_draft[x - 1][y + 1])) {
         legality[LEFT_BOTTOM] = true;
         legality_counter++;
     }
@@ -134,7 +153,7 @@ unsigned char * available_directions(int x, int y) {
     // Check left top
     if (!near_left_border
         && !near_top_border
-        && three_equality(maze_draft[x][y], maze_draft[x - 1][y], maze_draft[x - 1][y - 1])) {
+        && all_unique(maze_draft[x][y], maze_draft[x - 1][y], maze_draft[x - 1][y - 1])) {
         legality[LEFT_TOP] = true;
         legality_counter++;
     }
@@ -175,15 +194,9 @@ int ** maze() {
     }
     
     // Print maze_draft
-    printf("Initial maze draft:\n");
-    for (int x = 0; x < MAZE_SIZE; x++) {
-        for (int y = 0; y < MAZE_SIZE; y++) {
-            printf("%d\t", maze_draft[y][x]);
-        }
-        printf("\n");
-    }
+    print_maze_draft();
     printf("\n");
-    
+
     // Create graph
     int ** graph = (int ** ) calloc(total_nodes, sizeof(int * ));
     for (int i = 0; i < total_nodes; i++) {
@@ -214,13 +227,14 @@ int ** maze() {
             continue;
         };
 
-        printf("Pass: %d;\n");
+        printf("Pass: %d;\n", pass_number);
+        printf("Selected first node: (%d, %d);\n", x1, y1);
 
         int selected_index = (rand() % total_available_directions) + 1;
         int selected_direction = directions[selected_index];
     
         printf("Available directions:\n");
-        for(int i = 0; i < directions[0] + 1; i++) {
+        for(int i = 1; i < directions[0] + 1; i++) {
             printf("  -> %d\n", directions[i]);
         }
         
@@ -268,7 +282,7 @@ int ** maze() {
                 return NULL;
         }
         
-        // get third node coordinate
+        // get third node coordinate (if exists)
         if(is_diagonal) {
             switch (selected_direction) {
                 case TOP_LEFT:
@@ -299,9 +313,9 @@ int ** maze() {
 
         printf("Selected direction: %d;\n", selected_direction);
         if (is_diagonal) {
-            printf("Selected nodes: (%d, %d), (%d, %d), and (%d, %d);\n", x1, y1, x2, y2, x3, y3);
+            printf("All nodes: (%d, %d), (%d, %d), and (%d, %d);\n", x1, y1, x2, y2, x3, y3);
         } else {
-            printf("Selected nodes: (%d, %d) and (%d, %d);\n", x1, y1, x2, y2);
+            printf("All nodes: (%d, %d) and (%d, %d);\n", x1, y1, x2, y2);
         }
         
         // Add link in the graph
@@ -338,14 +352,8 @@ int ** maze() {
         }
         
         // Print maze_draft
-        printf("Current maze draft:\n");
-        for (int x = 0; x < MAZE_SIZE; x++) {
-            for (int y = 0; y < MAZE_SIZE; y++) {
-                printf("%d\t", maze_draft[y][x]);
-            }
-            printf("\n");
-        }
-        
+        print_maze_draft();
+
         // Check if all nodes already in the same room
         bool already_in_the_same_room = true;
         int room_sample = maze_draft[0][0];
