@@ -35,7 +35,7 @@ const int LEFT_TOP = 11;
 const int MAZE_SIZE = 4;
 
 int ** maze_draft;
-å
+
 bool three_equality(int x, int y, int z) {
     bool result = (x == y) && (y == z) && (z == x);
     return result;
