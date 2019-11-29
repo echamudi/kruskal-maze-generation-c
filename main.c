@@ -462,7 +462,7 @@ int ** maze() {
         printf("\n");
     }
     
-    // FREE
+    // Free mems
     for(int i = 0; i < MAZE_SIZE; i++)
         free(maze_draft[i]);
     free(maze_draft);
