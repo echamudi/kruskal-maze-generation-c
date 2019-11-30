@@ -1,6 +1,6 @@
 #  Kruskal Maze Generation
 
-Modified kruskal's maze generation algorithm written in C.
+Modified randomized Kruskal's maze generation algorithm written in C.
 
 ## Key Difference
 
