@@ -473,7 +473,13 @@ int ** maze() {
 
 int main(int argc, const char * argv[]) {
     printf("Kruskal's Maze Generation!\n");
-    maze();
+
+    int ** graph = maze();
     
+    // Free mems
+    for(int i = 0; i < MAZE_SIZE * MAZE_SIZE; i++)
+        free(graph[i]);
+    free(graph);
+
     return 0;
 }
