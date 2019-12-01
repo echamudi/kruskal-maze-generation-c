@@ -87,12 +87,12 @@ void print_maze_draft() {
     printf("\t");
 
     for (int i = 0; i < MAZE_SIZE; i++) {
-        printf("%d\t", i);
+        printf("[%d]\t", i);
     }
     printf("\n");
 
     for (int x = 0; x < MAZE_SIZE; x++) {
-        printf("%d\t", x);
+        printf("[%d]\t", x);
         for (int y = 0; y < MAZE_SIZE; y++) {
             printf("%d\t", maze_draft[y][x]);
         }
@@ -249,6 +249,7 @@ int ** maze() {
     }
     
     int pass_number = 0;
+    int rooms_counter = total_nodes;
     
     while (1) {
         pass_number++;
@@ -405,35 +406,43 @@ int ** maze() {
         print_maze_draft();
 
         // Check if all nodes already in the same room
-        bool already_in_the_same_room = true;
-        int room_sample = maze_draft[0][0];
-        
-        for (int x = 0; x < MAZE_SIZE; x++) {
-            for (int y = 0; y < MAZE_SIZE; y++) {
-                int room_check = maze_draft[x][y];
-                if (room_check != room_sample) {
-                    printf("Still not in one room. Continuing...\n");
-                    already_in_the_same_room = false;
-                    x = total_nodes; // For breaking the outer loop
-                    break;
-                }
-            }
+//        bool already_in_the_same_room = true;
+//        int room_sample = maze_draft[0][0];
+//
+//        for (int x = 0; x < MAZE_SIZE; x++) {
+//            for (int y = 0; y < MAZE_SIZE; y++) {
+//                int room_check = maze_draft[x][y];
+//                if (room_check != room_sample) {
+//                    printf("Still not in one room. Continuing...\n");
+//                    already_in_the_same_room = false;
+//                    x = total_nodes; // For breaking the outer loop
+//                    break;
+//                }
+//            }
+//        }
+ 
+        // Recalculate the total rooms
+        if (is_diagonal) {
+            rooms_counter -= 2;
+        } else {
+            rooms_counter -= 1;
         }
-        
+        printf("Total rooms: %d\n", rooms_counter);
+
         // All done!!!
-        if (already_in_the_same_room == true) {
+        if (rooms_counter == 1) {
             printf("DONE!\n\n");
 
             // Print graph
             printf("Final graph:\n");
             printf("\t");
             for (int i = 0; i < total_nodes; i++) {
-                printf("%d\t", i);
+                printf("[%d]\t", i);
             }
             printf("\n");
 
             for (int x = 0; x < total_nodes; x++) {
-                printf("%d\t", x);
+                printf("[%d]\t", x);
 
                 for (int y = 0; y < total_nodes; y++) {
                     printf("%d\t", graph[x][y]);
