@@ -480,11 +480,55 @@ int ** randomized_kruskal() {
     return graph;
 }
 
+void print_maze(int ** maze_graph, int size) {
+    int current_node;
+
+    for (int y = 0; y < size; y++)
+    {
+        for (int x = 0; x < size; x++)
+        {
+            // Check if there's connection to the above node.
+            current_node = x * size + y;
+
+            if (current_node - 1 >= 0 && maze_graph[current_node][current_node - 1] == 1) {
+                printf("X   ");
+            } else {
+                printf("XXXX");
+            }
+        }
+
+        // Top right border
+        printf("X\n");
+
+        for (int x = 0; x < size; x++)
+        {
+            // Check if there's connection to the left node.
+            current_node = x * size + y;
+            
+            if (current_node - size >= 0 && maze_graph[current_node][current_node - size] == 1) {
+                printf("    ");
+            } else {
+                printf("X   ");
+            }
+        }
+        printf("X\n");
+    }
+
+    // Bottom border
+    for (int i = 0; i < size; i++)
+    {
+        printf("XXXX");
+    }
+    printf("X\n");
+}
+
 int main(int argc, const char * argv[]) {
     printf("Kruskal's Maze Generation!\n");
 
     int ** graph = randomized_kruskal();
-    
+
+    print_maze(graph, MAZE_SIZE);
+
     // Free mems
     for(int i = 0; i < MAZE_SIZE * MAZE_SIZE; i++)
         free(graph[i]);
