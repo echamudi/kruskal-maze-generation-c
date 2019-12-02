@@ -219,7 +219,7 @@ unsigned char * available_directions(int x, int y) {
     return array;
 }
 
-int ** maze() {
+int ** randomized_kruskal() {
     // Initialize randomizer
     srand((unsigned) time(NULL));
     
@@ -483,7 +483,7 @@ int ** maze() {
 int main(int argc, const char * argv[]) {
     printf("Kruskal's Maze Generation!\n");
 
-    int ** graph = maze();
+    int ** graph = randomized_kruskal();
     
     // Free mems
     for(int i = 0; i < MAZE_SIZE * MAZE_SIZE; i++)
