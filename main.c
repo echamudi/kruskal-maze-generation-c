@@ -491,14 +491,14 @@ void print_maze(int ** maze_graph, int size) {
             current_node = x * size + y;
 
             if (current_node - 1 >= 0 && maze_graph[current_node][current_node - 1] == 1) {
-                printf("X   ");
+                printf("██  ");
             } else {
-                printf("XXXX");
+                printf("████");
             }
         }
 
-        // Top right border
-        printf("X\n");
+        // Right most border
+        printf("██\n");
 
         for (int x = 0; x < size; x++)
         {
@@ -508,18 +508,20 @@ void print_maze(int ** maze_graph, int size) {
             if (current_node - size >= 0 && maze_graph[current_node][current_node - size] == 1) {
                 printf("    ");
             } else {
-                printf("X   ");
+                printf("██  ");
             }
         }
-        printf("X\n");
+
+        // Right most border
+        printf("██\n");
     }
 
     // Bottom border
     for (int i = 0; i < size; i++)
     {
-        printf("XXXX");
+        printf("████");
     }
-    printf("X\n");
+    printf("██\n");
 }
 
 int main(int argc, const char * argv[]) {
