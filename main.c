@@ -417,22 +417,6 @@ int ** randomized_kruskal() {
         // Print maze_draft
         print_maze_draft();
 
-        // Check if all nodes already in the same room
-//        bool already_in_the_same_room = true;
-//        int room_sample = maze_draft[0][0];
-//
-//        for (int x = 0; x < MAZE_SIZE; x++) {
-//            for (int y = 0; y < MAZE_SIZE; y++) {
-//                int room_check = maze_draft[x][y];
-//                if (room_check != room_sample) {
-//                    printf("Still not in one room. Continuing...\n");
-//                    already_in_the_same_room = false;
-//                    x = total_nodes; // For breaking the outer loop
-//                    break;
-//                }
-//            }
-//        }
- 
         // Recalculate the total rooms
         if (is_diagonal) {
             rooms_counter -= 2;
