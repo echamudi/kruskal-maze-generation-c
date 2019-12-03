@@ -229,7 +229,7 @@ unsigned char * available_directions(int x, int y) {
     return array;
 }
 
-int ** randomized_kruskal() {
+int ** randomized_kruskal(bool verbose) {
     // Initialize randomizer
     srand((unsigned) time(NULL));
     
@@ -249,8 +249,10 @@ int ** randomized_kruskal() {
     }
     
     // Print maze_draft
-    print_maze_draft();
-    printf("\n");
+    if (verbose) {
+        print_maze_draft();
+        printf("\n");
+    }
 
     // Create graph
     int ** graph = (int ** ) calloc(total_nodes, sizeof(int * ));
@@ -285,19 +287,23 @@ int ** randomized_kruskal() {
             continue;
         };
 
-        printf("Pass: %d;\n", pass_number);
-        printf("Selected first node: (%d, %d);\n", x1, y1);
+        if (verbose) {
+            printf("Pass: %d;\n", pass_number);
+            printf("Selected first node: (%d, %d);\n", x1, y1);
+        }
 
         int selected_index = (rand() % total_available_directions) + 1;
         int selected_direction = directions[selected_index];
     
-        printf("Available directions:\n");
-        for(int i = 1; i < directions[0] + 1; i++) {
-            printf(" -> ");
-            print_direction(directions[i]);
-            printf("\n");
+        if (verbose) {
+            printf("Available directions:\n");
+            for(int i = 1; i < directions[0] + 1; i++) {
+                printf(" -> ");
+                print_direction(directions[i]);
+                printf("\n");
+            }
         }
-        
+
         free(directions);
         
         // diagonal flag
@@ -371,16 +377,18 @@ int ** randomized_kruskal() {
             }
         }
 
-        printf("Selected direction: ");
-        print_direction(selected_direction);
-        printf("\n");
-        
-        if (is_diagonal) {
-            printf("All nodes: (%d, %d), (%d, %d), and (%d, %d);\n", x1, y1, x2, y2, x3, y3);
-        } else {
-            printf("All nodes: (%d, %d) and (%d, %d);\n", x1, y1, x2, y2);
+        if (verbose) {
+            printf("Selected direction: ");
+            print_direction(selected_direction);
+            printf("\n");
+            
+            if (is_diagonal) {
+                printf("All nodes: (%d, %d), (%d, %d), and (%d, %d);\n", x1, y1, x2, y2, x3, y3);
+            } else {
+                printf("All nodes: (%d, %d) and (%d, %d);\n", x1, y1, x2, y2);
+            }
         }
-        
+
         // Add link in the graph
         int node1_id = x1 * MAZE_SIZE + y1;
         int node2_id = x2 * MAZE_SIZE + y2;
@@ -415,7 +423,7 @@ int ** randomized_kruskal() {
         }
         
         // Print maze_draft
-        print_maze_draft();
+        if (verbose) print_maze_draft();
 
         // Recalculate the total rooms
         if (is_diagonal) {
@@ -423,54 +431,58 @@ int ** randomized_kruskal() {
         } else {
             rooms_counter -= 1;
         }
-        printf("Total rooms: %d\n", rooms_counter);
+        if (verbose) printf("Total rooms: %d\n", rooms_counter);
 
         // All done!!!
         if (rooms_counter == 1) {
-            printf("DONE!\n\n");
+            if (verbose) {
+                printf("DONE!\n\n");
 
-            // Print graph
-            printf("Final graph:\n");
-            printf("\t");
-            for (int i = 0; i < total_nodes; i++) {
-                printf("[%d]\t", i);
-            }
-            printf("\n");
-
-            for (int x = 0; x < total_nodes; x++) {
-                printf("[%d]\t", x);
-
-                for (int y = 0; y < total_nodes; y++) {
-                    printf("%d\t", graph[x][y]);
+                // Print graph
+                printf("Final graph:\n");
+                printf("\t");
+                for (int i = 0; i < total_nodes; i++) {
+                    printf("[%d]\t", i);
                 }
                 printf("\n");
-            }
-            printf("\n");
 
-            // Print all connections
-            printf("All connections:\n");
-            for (int i = 0; i < total_nodes; i++)
-            {
-                printf("Node [%d] -> ", i);
-                
-                for (int j = 0; j < total_nodes; j++) {
-                    if (graph[i][j] == 1) {
-                        printf("[%d]", j);
+                for (int x = 0; x < total_nodes; x++) {
+                    printf("[%d]\t", x);
+
+                    for (int y = 0; y < total_nodes; y++) {
+                        printf("%d\t", graph[x][y]);
                     }
+                    printf("\n");
+                }
+                printf("\n");
+
+                // Print all connections
+                printf("All connections:\n");
+                for (int i = 0; i < total_nodes; i++)
+                {
+                    printf("Node [%d] -> ", i);
+                    
+                    for (int j = 0; j < total_nodes; j++) {
+                        if (graph[i][j] == 1) {
+                            printf("[%d]", j);
+                        }
+                    }
+                    printf("\n");
                 }
                 printf("\n");
             }
-            printf("\n");
 
             break;
         }
     }
 
     // Print total passes
-    printf("Total passes: %d\n", pass_number);
-    printf("Total failed passes: %d\n", failed_pass_number);
+    if (verbose) {
+        printf("Total passes: %d\n", pass_number);
+        printf("Total failed passes: %d\n", failed_pass_number);
 
-    printf("\n");
+        printf("\n");
+    }
 
     // Free mems
     for(int i = 0; i < MAZE_SIZE; i++)
@@ -527,7 +539,7 @@ void print_maze(int ** maze_graph, int size) {
 int main(int argc, const char * argv[]) {
     printf("Kruskal's Maze Generation!\n");
 
-    int ** graph = randomized_kruskal();
+    int ** graph = randomized_kruskal(true);
 
     print_maze(graph, MAZE_SIZE);
 
