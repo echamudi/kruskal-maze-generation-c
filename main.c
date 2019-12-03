@@ -35,6 +35,8 @@ const int LEFT_TOP = 11;
 
 const int MAZE_SIZE = 4;
 
+const bool ENABlE_DIAGONAL = true;
+
 int ** maze_draft;
 
 void print_direction(int code) {
@@ -116,7 +118,8 @@ unsigned char * available_directions(int x, int y) {
     bool near_left_border = x == 0;
 
     // Check top left
-    if (!near_top_border
+    if (ENABlE_DIAGONAL
+        && !near_top_border
         && !near_left_border
         && all_unique(maze_draft[x][y], maze_draft[x][y - 1], maze_draft[x - 1][y - 1])) {
         legality[TOP_LEFT] = true;
@@ -130,7 +133,8 @@ unsigned char * available_directions(int x, int y) {
     }
     
     // Check top right
-    if (!near_top_border
+    if (ENABlE_DIAGONAL
+        && !near_top_border
         && !near_right_border
         && all_unique(maze_draft[x][y], maze_draft[x][y - 1], maze_draft[x + 1][y - 1])) {
         legality[TOP_RIGHT] = true;
@@ -138,7 +142,8 @@ unsigned char * available_directions(int x, int y) {
     }
 
     // Check right top
-    if (!near_right_border
+    if (ENABlE_DIAGONAL
+        && !near_right_border
         && !near_top_border
         && all_unique(maze_draft[x][y], maze_draft[x + 1][y], maze_draft[x + 1][y - 1])) {
         legality[RIGHT_TOP] = true;
@@ -152,7 +157,8 @@ unsigned char * available_directions(int x, int y) {
     }
 
     // Check right bottom
-    if (!near_right_border
+    if (ENABlE_DIAGONAL
+        && !near_right_border
         && !near_bottom_border
         && all_unique(maze_draft[x][y], maze_draft[x + 1][y], maze_draft[x + 1][y + 1])) {
         legality[RIGHT_BOTTOM] = true;
@@ -160,7 +166,8 @@ unsigned char * available_directions(int x, int y) {
     }
 
     // Check bottom right
-    if (!near_bottom_border
+    if (ENABlE_DIAGONAL
+        && !near_bottom_border
         && !near_right_border
         && all_unique(maze_draft[x][y], maze_draft[x][y + 1], maze_draft[x + 1][y + 1])) {
         legality[BOTTOM_RIGHT] = true;
@@ -174,7 +181,8 @@ unsigned char * available_directions(int x, int y) {
     }
     
     // Check bottom left
-    if (!near_bottom_border
+    if (ENABlE_DIAGONAL
+        && !near_bottom_border
         && !near_left_border
         && all_unique(maze_draft[x][y], maze_draft[x][y + 1], maze_draft[x - 1][y + 1])) {
         legality[BOTTOM_LEFT] = true;
@@ -182,7 +190,8 @@ unsigned char * available_directions(int x, int y) {
     }
 
     // Check left bottom
-    if (!near_left_border
+    if (ENABlE_DIAGONAL
+        && !near_left_border
         && !near_bottom_border
         && all_unique(maze_draft[x][y], maze_draft[x - 1][y], maze_draft[x - 1][y + 1])) {
         legality[LEFT_BOTTOM] = true;
@@ -196,7 +205,8 @@ unsigned char * available_directions(int x, int y) {
     }
 
     // Check left top
-    if (!near_left_border
+    if (ENABlE_DIAGONAL
+        && !near_left_border
         && !near_top_border
         && all_unique(maze_draft[x][y], maze_draft[x - 1][y], maze_draft[x - 1][y - 1])) {
         legality[LEFT_TOP] = true;
