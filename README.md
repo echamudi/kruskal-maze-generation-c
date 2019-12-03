@@ -12,7 +12,7 @@ Modified randomized Kruskal's maze generation algorithm written in C.
 
 ## Running
 ```
-clang main.c && .\a.out
+clang main.c && ./a.out
 ```
 
 ## License
