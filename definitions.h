@@ -40,6 +40,8 @@ const int LEFT_BOTTOM = 9;
 const int LEFT = 10;
 const int LEFT_TOP = 11;
 
-
+const int LETTER_E = 70;
+const int LETTER_A = 71;
+const int LETTER_S = 72;
 
 #endif /* definitions_h */
