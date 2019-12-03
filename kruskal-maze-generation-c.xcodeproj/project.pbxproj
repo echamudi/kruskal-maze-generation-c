@@ -23,6 +23,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7273365323963C20009E5744 /* print_maze.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = print_maze.h; sourceTree = "<group>"; };
 		72A7A0F623917E6F00217BB1 /* kruskal-maze-generation-c */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "kruskal-maze-generation-c"; sourceTree = BUILT_PRODUCTS_DIR; };
 		72A7A0F923917E6F00217BB1 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		72C041A7239199DD00A873B8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -43,6 +44,7 @@
 		72A7A0ED23917E6F00217BB1 = {
 			isa = PBXGroup;
 			children = (
+				7273365323963C20009E5744 /* print_maze.h */,
 				72C041A823919B6900A873B8 /* LICENSE */,
 				72C041A7239199DD00A873B8 /* README.md */,
 				72A7A0F923917E6F00217BB1 /* main.c */,
