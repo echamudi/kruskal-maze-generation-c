@@ -34,7 +34,7 @@ unsigned char *available_directions(int x, int y, int **maze_draft, int size, un
     if ((options & enable_diagonal)
         && !near_top_border
         && !near_left_border
-        && all_unique(maze_draft[x][y], maze_draft[x][y - 1], maze_draft[x - 1][y - 1]))
+        && all_unique_3(maze_draft[x][y], maze_draft[x][y - 1], maze_draft[x - 1][y - 1]))
     {
         legality[TOP_LEFT] = true;
         legality_counter++;
@@ -53,7 +53,7 @@ unsigned char *available_directions(int x, int y, int **maze_draft, int size, un
     if ((options & enable_diagonal)
         && !near_top_border
         && !near_right_border
-        && all_unique(maze_draft[x][y], maze_draft[x][y - 1], maze_draft[x + 1][y - 1]))
+        && all_unique_3(maze_draft[x][y], maze_draft[x][y - 1], maze_draft[x + 1][y - 1]))
     {
         legality[TOP_RIGHT] = true;
         legality_counter++;
@@ -63,7 +63,7 @@ unsigned char *available_directions(int x, int y, int **maze_draft, int size, un
     if ((options & enable_diagonal)
         && !near_right_border
         && !near_top_border
-        && all_unique(maze_draft[x][y], maze_draft[x + 1][y], maze_draft[x + 1][y - 1]))
+        && all_unique_3(maze_draft[x][y], maze_draft[x + 1][y], maze_draft[x + 1][y - 1]))
     {
         legality[RIGHT_TOP] = true;
         legality_counter++;
@@ -82,7 +82,7 @@ unsigned char *available_directions(int x, int y, int **maze_draft, int size, un
     if ((options & enable_diagonal)
         && !near_right_border
         && !near_bottom_border
-        && all_unique(maze_draft[x][y], maze_draft[x + 1][y], maze_draft[x + 1][y + 1]))
+        && all_unique_3(maze_draft[x][y], maze_draft[x + 1][y], maze_draft[x + 1][y + 1]))
     {
         legality[RIGHT_BOTTOM] = true;
         legality_counter++;
@@ -92,7 +92,7 @@ unsigned char *available_directions(int x, int y, int **maze_draft, int size, un
     if ((options & enable_diagonal)
         && !near_bottom_border
         && !near_right_border
-        && all_unique(maze_draft[x][y], maze_draft[x][y + 1], maze_draft[x + 1][y + 1]))
+        && all_unique_3(maze_draft[x][y], maze_draft[x][y + 1], maze_draft[x + 1][y + 1]))
     {
         legality[BOTTOM_RIGHT] = true;
         legality_counter++;
@@ -111,7 +111,7 @@ unsigned char *available_directions(int x, int y, int **maze_draft, int size, un
     if ((options & enable_diagonal)
         && !near_bottom_border
         && !near_left_border
-        && all_unique(maze_draft[x][y], maze_draft[x][y + 1], maze_draft[x - 1][y + 1]))
+        && all_unique_3(maze_draft[x][y], maze_draft[x][y + 1], maze_draft[x - 1][y + 1]))
     {
         legality[BOTTOM_LEFT] = true;
         legality_counter++;
@@ -121,7 +121,7 @@ unsigned char *available_directions(int x, int y, int **maze_draft, int size, un
     if ((options & enable_diagonal)
         && !near_left_border
         && !near_bottom_border
-        && all_unique(maze_draft[x][y], maze_draft[x - 1][y], maze_draft[x - 1][y + 1]))
+        && all_unique_3(maze_draft[x][y], maze_draft[x - 1][y], maze_draft[x - 1][y + 1]))
     {
         legality[LEFT_BOTTOM] = true;
         legality_counter++;
@@ -140,7 +140,7 @@ unsigned char *available_directions(int x, int y, int **maze_draft, int size, un
     if ((options & enable_diagonal)
         && !near_left_border
         && !near_top_border
-        && all_unique(maze_draft[x][y], maze_draft[x - 1][y], maze_draft[x - 1][y - 1]))
+        && all_unique_3(maze_draft[x][y], maze_draft[x - 1][y], maze_draft[x - 1][y - 1]))
     {
         legality[LEFT_TOP] = true;
         legality_counter++;

@@ -9,7 +9,7 @@
 #ifndef util_h
 #define util_h
 
-bool all_unique(int x, int y, int z)
+bool all_unique_3(int x, int y, int z)
 {
     bool result = (x != y) && (y != z) && (z != x);
     return result;
