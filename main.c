@@ -249,6 +249,7 @@ int ** randomized_kruskal() {
     }
     
     int pass_number = 0;
+    int failed_pass_number = 0;
     int rooms_counter = total_nodes;
     
     while (1) {
@@ -270,6 +271,7 @@ int ** randomized_kruskal() {
         // If the selected node has no available direction, re-random
         if (total_available_directions == 0) {
             free(directions);
+            failed_pass_number++;
             continue;
         };
 
@@ -468,10 +470,14 @@ int ** randomized_kruskal() {
 
             break;
         }
-        
-        printf("\n");
     }
-    
+
+    // Print total passes
+    printf("Total passes: %d\n", pass_number);
+    printf("Total failed passes: %d\n", failed_pass_number);
+
+    printf("\n");
+
     // Free mems
     for(int i = 0; i < MAZE_SIZE; i++)
         free(maze_draft[i]);
