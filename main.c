@@ -495,6 +495,7 @@ struct maze randomized_kruskal(bool verbose, int size) {
 
     result.total_passes = pass_number;
     result.total_failed_passes = failed_pass_number;
+    result.size = size;
     result.graph = graph;
 
     return result;
