@@ -308,6 +308,8 @@ struct maze randomized_kruskal(bool verbose, int size, unsigned int direction_op
     int pass_number = 0;
     int failed_pass_number = 0;
     int rooms_counter = total_nodes;
+    int fail_streak = 0;
+    const int max_fail_streak = size * size * 10;
 
     while (1)
     {
@@ -331,8 +333,17 @@ struct maze randomized_kruskal(bool verbose, int size, unsigned int direction_op
         {
             free(directions);
             failed_pass_number++;
+            fail_streak++;
+            
+            if (fail_streak > max_fail_streak) {
+                printf("ERROR: Too much fail streak.");
+                exit(1);
+            }
+
             continue;
-        };
+        } else {
+            fail_streak = 0;
+        }
 
         if (verbose)
         {
