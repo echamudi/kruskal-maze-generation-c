@@ -44,8 +44,6 @@ const int LEFT_TOP = 11;
 
 const bool ENABLE_DIAGONAL = true;
 
-int ** maze_draft;
-
 void print_direction(int code) {
     switch (code) {
         case TOP_LEFT:
@@ -90,7 +88,7 @@ void print_direction(int code) {
     }
 }
 
-void print_maze_draft(int size) {
+void print_maze_draft(int ** maze_draft, int size) {
     // Print maze_draft
     printf("Current maze draft:\n");
     printf("\t");
@@ -114,7 +112,7 @@ bool all_unique(int x, int y, int z) {
     return result;
 }
 
-unsigned char * available_directions(int x, int y, int size) {
+unsigned char * available_directions(int x, int y, int ** maze_draft, int size) {
     int legality_counter = 0;
 
     bool legality[TOTAL_DIRECTIONS] = {false};
@@ -243,7 +241,7 @@ struct maze randomized_kruskal(bool verbose, int size) {
     const int total_nodes = size * size;
     
     // Create maze draft
-    maze_draft = (int ** ) calloc(size, sizeof(int * ));
+    int ** maze_draft = (int ** ) calloc(size, sizeof(int * ));
     for (int i = 0; i < size; i++) {
         maze_draft[i] = (int * ) calloc(size, sizeof(int));
     }
@@ -257,7 +255,7 @@ struct maze randomized_kruskal(bool verbose, int size) {
     
     // Print maze_draft
     if (verbose) {
-        print_maze_draft(size);
+        print_maze_draft(maze_draft, size);
         printf("\n");
     }
 
@@ -284,7 +282,7 @@ struct maze randomized_kruskal(bool verbose, int size) {
         x1 = rand() % size;
         y1 = rand() % size;
         
-        unsigned char * directions = available_directions(x1, y1, size);
+        unsigned char * directions = available_directions(x1, y1, maze_draft, size);
         unsigned char total_available_directions = directions[0];
         
         // If the selected node has no available direction, re-random
@@ -430,7 +428,7 @@ struct maze randomized_kruskal(bool verbose, int size) {
         }
         
         // Print maze_draft
-        if (verbose) print_maze_draft(size);
+        if (verbose) print_maze_draft(maze_draft, size);
 
         // Recalculate the total rooms
         if (is_diagonal) {
