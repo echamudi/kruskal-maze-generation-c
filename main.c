@@ -666,10 +666,5 @@ int main(int argc, const char *argv[])
         free(maze1.graph[i]);
     free(maze1.graph);
 
-    printf("Standard\n");
-    stats(0b00000001);
-    printf("Standard + Diagonal\n");
-    stats(0b00000011);
-
     return 0;
 }
