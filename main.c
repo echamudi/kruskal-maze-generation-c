@@ -503,8 +503,11 @@ struct maze randomized_kruskal(bool verbose, int size, unsigned int direction_op
             printf("Total rooms: %d\n", rooms_counter);
 
         // All done!!!
-        if (rooms_counter == 1)
+        if (rooms_counter == 1) {
             break;
+        } else {
+            if (verbose) printf("\n");
+        }
     }
 
     result.total_deg1_nodes = 0;
@@ -605,10 +608,10 @@ struct maze randomized_kruskal(bool verbose, int size, unsigned int direction_op
     return result;
 }
 
-void stats()
+void stats(unsigned int direction_options)
 {
     int size = 10;
-    int trials = 300000;
+    int trials = 100000;
 
     // Calculate average of passes
     double avg_deg1_nodes = 0;
@@ -618,7 +621,7 @@ void stats()
 
     for (int i = 0; i < trials; i++)
     {
-        struct maze my_maze = randomized_kruskal(false, size, 0b11111111);
+        struct maze my_maze = randomized_kruskal(false, size, direction_options);
         avg_deg1_nodes += (double)my_maze.total_deg1_nodes / trials;
         avg_deg2_nodes += (double)my_maze.total_deg2_nodes / trials;
         avg_deg3_nodes += (double)my_maze.total_deg3_nodes / trials;
@@ -653,7 +656,10 @@ int main(int argc, const char *argv[])
         free(maze1.graph[i]);
     free(maze1.graph);
 
-//    stats();
+    printf("Standard\n");
+    stats(0b00000001);
+    printf("Standard + Diagonal\n");
+    stats(0b00000011);
 
     return 0;
 }
