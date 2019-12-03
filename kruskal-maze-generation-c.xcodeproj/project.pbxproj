@@ -50,14 +50,14 @@
 		72A7A0ED23917E6F00217BB1 = {
 			isa = PBXGroup;
 			children = (
-				727E30532396E6C1007BAA24 /* randomized_kruskal.h */,
-				727E30522396E681007BAA24 /* stats.h */,
 				72C041A823919B6900A873B8 /* LICENSE */,
 				72A7A0F923917E6F00217BB1 /* main.c */,
 				727E304E2396E477007BAA24 /* definitions.h */,
 				727E304F2396E4C5007BAA24 /* print_direction.h */,
 				727E30512396E5A7007BAA24 /* print_maze_draft.h */,
 				7273365323963C20009E5744 /* print_maze.h */,
+				727E30532396E6C1007BAA24 /* randomized_kruskal.h */,
+				727E30522396E681007BAA24 /* stats.h */,
 				727E30502396E528007BAA24 /* util.h */,
 				72C041A7239199DD00A873B8 /* README.md */,
 				72A7A0F723917E6F00217BB1 /* Products */,
