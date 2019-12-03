@@ -46,8 +46,6 @@ const int LEFT_BOTTOM = 9;
 const int LEFT = 10;
 const int LEFT_TOP = 11;
 
-const bool ENABLE_DIAGONAL = true;
-
 void print_direction(int code)
 {
     switch (code)
