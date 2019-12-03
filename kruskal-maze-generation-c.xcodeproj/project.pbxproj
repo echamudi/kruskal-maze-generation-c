@@ -23,6 +23,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7273365323963C20009E5744 /* print_maze.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = print_maze.h; sourceTree = "<group>"; };
+		727E304E2396E477007BAA24 /* definitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = definitions.h; sourceTree = "<group>"; };
+		727E304F2396E4C5007BAA24 /* print_direction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = print_direction.h; sourceTree = "<group>"; };
+		727E30502396E528007BAA24 /* util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
+		727E30512396E5A7007BAA24 /* print_maze_draft.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = print_maze_draft.h; sourceTree = "<group>"; };
+		727E30522396E681007BAA24 /* stats.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stats.h; sourceTree = "<group>"; };
+		727E30532396E6C1007BAA24 /* randomized_kruskal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = randomized_kruskal.h; sourceTree = "<group>"; };
 		72A7A0F623917E6F00217BB1 /* kruskal-maze-generation-c */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "kruskal-maze-generation-c"; sourceTree = BUILT_PRODUCTS_DIR; };
 		72A7A0F923917E6F00217BB1 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		72C041A7239199DD00A873B8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -44,8 +51,15 @@
 			isa = PBXGroup;
 			children = (
 				72C041A823919B6900A873B8 /* LICENSE */,
-				72C041A7239199DD00A873B8 /* README.md */,
 				72A7A0F923917E6F00217BB1 /* main.c */,
+				727E304E2396E477007BAA24 /* definitions.h */,
+				727E304F2396E4C5007BAA24 /* print_direction.h */,
+				727E30512396E5A7007BAA24 /* print_maze_draft.h */,
+				7273365323963C20009E5744 /* print_maze.h */,
+				727E30532396E6C1007BAA24 /* randomized_kruskal.h */,
+				727E30522396E681007BAA24 /* stats.h */,
+				727E30502396E528007BAA24 /* util.h */,
+				72C041A7239199DD00A873B8 /* README.md */,
 				72A7A0F723917E6F00217BB1 /* Products */,
 			);
 			sourceTree = "<group>";
