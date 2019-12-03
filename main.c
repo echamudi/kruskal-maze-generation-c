@@ -336,7 +336,8 @@ struct maze randomized_kruskal(bool verbose, int size, unsigned int direction_op
             fail_streak++;
             
             if (fail_streak > max_fail_streak) {
-                printf("ERROR: Too much fail streak.");
+                printf("ERROR: Too much fail streak. Can't combine all rooms using legal directions.\n");
+                print_maze(graph, size);
                 exit(1);
             }
 
@@ -656,7 +657,7 @@ int main(int argc, const char *argv[])
 
     int size = 4;
 
-    struct maze maze1 = randomized_kruskal(true, size, 0b00000001);
+    struct maze maze1 = randomized_kruskal(true, size, 0b00000011);
 
     print_maze(maze1.graph, size);
 
