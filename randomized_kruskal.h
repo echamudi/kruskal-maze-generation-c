@@ -556,6 +556,9 @@ struct maze randomized_kruskal(bool verbose, int size, unsigned int direction_op
         if (verbose)
             printf("Total rooms: %d\n", rooms_counter);
 
+        free(selected_nodes);
+        free(merge_room_hashes);
+
         // All done!!!
         if (rooms_counter == 1) {
             break;
