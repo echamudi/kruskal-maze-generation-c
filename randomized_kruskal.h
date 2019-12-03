@@ -15,6 +15,11 @@
 #ifndef randomized_kruskal_h
 #define randomized_kruskal_h
 
+struct coordinate {
+    unsigned int x;
+    unsigned int y;
+};
+
 unsigned char *available_directions(int x, int y, int **maze_draft, int size, unsigned int options)
 {
     const unsigned int enable_standard = 0b00000001;
@@ -29,6 +34,8 @@ unsigned char *available_directions(int x, int y, int **maze_draft, int size, un
     bool near_right_border = x == (size - 1);
     bool near_bottom_border = y == (size - 1);
     bool near_left_border = x == 0;
+
+    bool near_border = near_top_border || near_right_border || near_bottom_border || near_left_border;
 
     // Check top left
     if ((options & enable_diagonal)
@@ -146,6 +153,32 @@ unsigned char *available_directions(int x, int y, int **maze_draft, int size, un
         legality_counter++;
     }
 
+    // Checking letters
+
+    // Check letter S
+    if ((options & enable_letters)
+        && !near_border)
+    {
+        int rooms_S[9] = {
+            maze_draft[x - 1][y - 1],
+            maze_draft[x][y - 1],
+            maze_draft[x + 1][y - 1],
+            
+            maze_draft[x - 1][y],
+            maze_draft[x][y],
+            maze_draft[x + 1][y],
+            
+            maze_draft[x - 1][y + 1],
+            maze_draft[x][y + 1],
+            maze_draft[x + 1][y + 1]
+        };
+
+        if (all_unique_array(9, rooms_S)) {
+            legality[LETTER_S] = true;
+            legality_counter++;
+        }
+    }
+
     unsigned char *array = (unsigned char *)calloc(legality_counter + 1, sizeof(unsigned char));
 
     array[0] = legality_counter; // First element shows how many items are legal
@@ -209,17 +242,12 @@ struct maze randomized_kruskal(bool verbose, int size, unsigned int direction_op
     {
         pass_number++;
 
-        int x1 = -1;
-        int y1 = -1;
-        int x2 = -1;
-        int y2 = -1;
-        int x3 = -1;
-        int y3 = -1;
+        struct coordinate node_mid;
 
-        x1 = rand() % size;
-        y1 = rand() % size;
+        node_mid.x = rand() % size;
+        node_mid.y = rand() % size;
 
-        unsigned char *directions = available_directions(x1, y1, maze_draft, size, direction_options);
+        unsigned char *directions = available_directions(node_mid.x, node_mid.y, maze_draft, size, direction_options);
         unsigned char total_available_directions = directions[0];
 
         // If the selected node has no available direction, re-random
@@ -243,11 +271,8 @@ struct maze randomized_kruskal(bool verbose, int size, unsigned int direction_op
         if (verbose)
         {
             printf("Pass: %d;\n", pass_number);
-            printf("Selected first node: (%d, %d);\n", x1, y1);
+            printf("Selected middle node: (%d, %d);\n", node_mid.x, node_mid.y);
         }
-
-        int selected_index = (rand() % total_available_directions) + 1;
-        int selected_direction = directions[selected_index];
 
         if (verbose)
         {
@@ -260,133 +285,253 @@ struct maze randomized_kruskal(bool verbose, int size, unsigned int direction_op
             }
         }
 
+        // Select the direction
+        int selected_direction;
+        if (directions[total_available_directions] == LETTER_S) {
+            // Select letter S if it's available
+            selected_direction = directions[total_available_directions];
+            
+            if (verbose)
+            {
+                printf("Selected direction is letter-S because why not.");
+                printf("\n");
+            }
+        } else {
+            // Otherwise, randomize
+            int selected_index = (rand() % total_available_directions) + 1;
+            selected_direction = directions[selected_index];
+
+            if (verbose)
+            {
+                printf("Selected direction (random): ");
+                print_direction(selected_direction);
+                printf("\n");
+            }
+        }
+ 
         free(directions);
 
-        // diagonal flag
-        bool is_diagonal;
-        if (selected_direction != TOP && selected_direction != RIGHT && selected_direction != BOTTOM && selected_direction != LEFT)
-        {
-            is_diagonal = true;
-        }
-        else
-        {
-            is_diagonal = false;
+        // direction flag
+        bool is_diagonal = false;
+        bool is_standard = false;
+        bool is_letter = false;
+
+        switch (selected_direction) {
+            case TOP:
+            case RIGHT:
+            case BOTTOM:
+            case LEFT:
+                is_standard = true;
+                break;
+            case TOP_LEFT:
+            case TOP_RIGHT:
+            case RIGHT_TOP:
+            case RIGHT_BOTTOM:
+            case BOTTOM_RIGHT:
+            case BOTTOM_LEFT:
+            case LEFT_BOTTOM:
+            case LEFT_TOP:
+                is_diagonal = true;
+                break;
+            case LETTER_S:
+                is_letter = true;
+                break;
+            default:
+                printf("ERROR: Wrong direction code %d.", selected_direction);
+                exit(1);
         }
 
-        // get second node coordinate
-        switch (selected_direction)
-        {
-        case TOP_LEFT:
-        case TOP:
-        case TOP_RIGHT:
-            x2 = x1;
-            y2 = y1 - 1;
-            break;
-        case RIGHT_TOP:
-        case RIGHT:
-        case RIGHT_BOTTOM:
-            x2 = x1 + 1;
-            y2 = y1;
-            break;
-        case BOTTOM_RIGHT:
-        case BOTTOM:
-        case BOTTOM_LEFT:
-            x2 = x1;
-            y2 = y1 + 1;
-            break;
-        case LEFT_BOTTOM:
-        case LEFT:
-        case LEFT_TOP:
-            x2 = x1 - 1;
-            y2 = y1;
-            break;
-        default:
-            printf("ERROR: Wrong direction code.");
-            exit(1);
-        }
+        // get selected node coordinates
+        struct coordinate * selected_nodes;
+        int total_selected_nodes = -1;
+        
+        if (is_standard) {
+            total_selected_nodes = 2;
+            
+            selected_nodes = (struct coordinate *) calloc(total_selected_nodes, sizeof(struct coordinate));
+            selected_nodes[0] = node_mid;
 
-        // get third node coordinate (if exists)
-        if (is_diagonal)
-        {
+            switch (selected_direction)
+            {
+            case TOP:
+                selected_nodes[1].x = node_mid.x;
+                selected_nodes[1].y = node_mid.y - 1;
+                break;
+            case RIGHT:
+                selected_nodes[1].x = node_mid.x + 1;
+                selected_nodes[1].y = node_mid.y;
+                break;
+            case BOTTOM:
+                selected_nodes[1].x = node_mid.x;
+                selected_nodes[1].y = node_mid.y + 1;
+                break;
+            case LEFT:
+                selected_nodes[1].x = node_mid.x - 1;
+                selected_nodes[1].y = node_mid.y;
+                break;
+            default:
+                break;
+            }
+        } else if (is_diagonal) {
+            total_selected_nodes = 3;
+
+            selected_nodes = (struct coordinate *) calloc(total_selected_nodes, sizeof(struct coordinate));
+            selected_nodes[0] = node_mid;
+
+            switch (selected_direction)
+            {
+            case TOP_LEFT:
+            case TOP_RIGHT:
+                selected_nodes[1].x = node_mid.x;
+                selected_nodes[1].y = node_mid.y - 1;
+                break;
+            case RIGHT_TOP:
+            case RIGHT_BOTTOM:
+                selected_nodes[1].x = node_mid.x + 1;
+                selected_nodes[1].y = node_mid.y;
+                break;
+            case BOTTOM_LEFT:
+            case BOTTOM_RIGHT:
+                selected_nodes[1].x = node_mid.x;
+                selected_nodes[1].y = node_mid.y + 1;
+                break;
+            case LEFT_TOP:
+            case LEFT_BOTTOM:
+                selected_nodes[1].x = node_mid.x - 1;
+                selected_nodes[1].y = node_mid.y;
+                break;
+            default:
+                break;
+            }
+
             switch (selected_direction)
             {
             case TOP_LEFT:
             case LEFT_TOP:
-                x3 = x1 - 1;
-                y3 = y1 - 1;
+                selected_nodes[2].x = node_mid.x - 1;
+                selected_nodes[2].y = node_mid.y - 1;
                 break;
             case TOP_RIGHT:
             case RIGHT_TOP:
-                x3 = x1 + 1;
-                y3 = y1 - 1;
+                selected_nodes[2].x = node_mid.x + 1;
+                selected_nodes[2].y = node_mid.y - 1;
                 break;
-            case BOTTOM_RIGHT:
             case RIGHT_BOTTOM:
-                x3 = x1 + 1;
-                y3 = y1 + 1;
+            case BOTTOM_RIGHT:
+                selected_nodes[2].x = node_mid.x + 1;
+                selected_nodes[2].y = node_mid.y + 1;
                 break;
-            case BOTTOM_LEFT:
             case LEFT_BOTTOM:
-                x3 = x1 - 1;
-                y3 = y1 + 1;
+            case BOTTOM_LEFT:
+                selected_nodes[2].x = node_mid.x - 1;
+                selected_nodes[2].y = node_mid.y + 1;
                 break;
             default:
-                printf("ERROR: Wrong diagonal direction code.");
-                exit(1);
+                break;
             }
+
+        } else if (is_letter && selected_direction == LETTER_S) {
+            total_selected_nodes = 9;
+
+            selected_nodes = (struct coordinate *) calloc(total_selected_nodes, sizeof(struct coordinate));
+            
+            // First row
+            selected_nodes[0].x = node_mid.x - 1;
+            selected_nodes[0].y = node_mid.y - 1;
+            selected_nodes[1].x = node_mid.x;
+            selected_nodes[1].y = node_mid.y - 1;
+            selected_nodes[2].x = node_mid.x + 1;
+            selected_nodes[2].y = node_mid.y - 1;
+            
+            // Second row
+            selected_nodes[3].x = node_mid.x - 1;
+            selected_nodes[3].y = node_mid.y;
+            selected_nodes[4].x = node_mid.x;
+            selected_nodes[4].y = node_mid.y;
+            selected_nodes[5].x = node_mid.x + 1;
+            selected_nodes[5].y = node_mid.y;
+            
+            // Last row
+            selected_nodes[6].x = node_mid.x - 1;
+            selected_nodes[6].y = node_mid.y + 1;
+            selected_nodes[7].x = node_mid.x;
+            selected_nodes[7].y = node_mid.y + 1;
+            selected_nodes[8].x = node_mid.x + 1;
+            selected_nodes[8].y = node_mid.y + 1;
+
+        } else {
+            printf("FAIL: wrong mode.");
+            exit(1);
         }
-
-        if (verbose)
-        {
-            printf("Selected direction: ");
-            print_direction(selected_direction);
-            printf("\n");
-
-            if (is_diagonal)
-            {
-                printf("All nodes: (%d, %d), (%d, %d), and (%d, %d);\n", x1, y1, x2, y2, x3, y3);
-            }
-            else
-            {
-                printf("All nodes: (%d, %d) and (%d, %d);\n", x1, y1, x2, y2);
-            }
-        }
-
+                
         // Add link in the graph
-        int node1_id = x1 * size + y1;
-        int node2_id = x2 * size + y2;
-        int node3_id = -1;
+        
+        if (is_standard) {
+            int node0_id = selected_nodes[0].x * size + selected_nodes[0].y;
+            int node1_id = selected_nodes[1].x * size + selected_nodes[1].y;
 
-        if (is_diagonal)
-        {
-            node3_id = x3 * size + y3;
+            graph[node0_id][node1_id] = 1;
+            graph[node1_id][node0_id] = 1;
+        } else if (is_diagonal) {
+            int node0_id = selected_nodes[0].x * size + selected_nodes[0].y;
+            int node1_id = selected_nodes[1].x * size + selected_nodes[1].y;
+            int node2_id = selected_nodes[2].x * size + selected_nodes[2].y;
+
+            graph[node0_id][node1_id] = 1;
+            graph[node1_id][node0_id] = 1;
+
+            graph[node1_id][node2_id] = 1;
+            graph[node2_id][node1_id] = 1;
+        } else if (is_letter && selected_direction == LETTER_S) {
+            
+            int node_id[9];
+            
+            for (int i = 0; i < 9; i++) {
+                node_id[i] = selected_nodes[i].x * size + selected_nodes[i].y;
+            }
+            
+            // First horizontal line
+            graph[node_id[0]][node_id[1]] = 1;
+            graph[node_id[1]][node_id[0]] = 1;
+            graph[node_id[1]][node_id[2]] = 1;
+            graph[node_id[2]][node_id[1]] = 1;
+            
+            // Second horizontal line
+            graph[node_id[3]][node_id[4]] = 1;
+            graph[node_id[4]][node_id[3]] = 1;
+            graph[node_id[4]][node_id[5]] = 1;
+            graph[node_id[5]][node_id[4]] = 1;
+            
+            // Third horizontal line
+            graph[node_id[6]][node_id[7]] = 1;
+            graph[node_id[7]][node_id[6]] = 1;
+            graph[node_id[7]][node_id[8]] = 1;
+            graph[node_id[8]][node_id[7]] = 1;
+
+            // First Vertical Line
+            graph[node_id[0]][node_id[3]] = 1;
+            graph[node_id[3]][node_id[0]] = 1;
+
+            // Third Vertical Line
+            graph[node_id[5]][node_id[8]] = 1;
+            graph[node_id[8]][node_id[5]] = 1;
         }
 
-        graph[node1_id][node2_id] = 1;
-        graph[node2_id][node1_id] = 1;
-
-        if (is_diagonal)
-        {
-            graph[node2_id][node3_id] = 1;
-            graph[node3_id][node2_id] = 1;
+        // Unify rooms in maze draft
+        bool * merge_room_hashes = (bool *) calloc(total_nodes, sizeof(bool));
+        
+        for (int i = 0; i < total_selected_nodes; i++) {
+            int room_id = maze_draft[selected_nodes[i].x][selected_nodes[i].y];
+            merge_room_hashes[room_id] = true;
         }
 
-        // Unify rooms
-        int node1_room = maze_draft[x1][y1];
-        int node2_room = maze_draft[x2][y2];
-        int node3_room = -1;
-
-        if (is_diagonal)
-        {
-            node3_room = maze_draft[x3][y3];
-        }
-
+        int target_room = maze_draft[selected_nodes[0].x][selected_nodes[0].y];
+ 
         for (int x = 0; x < size; x++)
         {
             for (int y = 0; y < size; y++)
             {
-                if (maze_draft[x][y] == node1_room || maze_draft[x][y] == node2_room || maze_draft[x][y] == node3_room)
-                    maze_draft[x][y] = node1_room;
+                if (merge_room_hashes[maze_draft[x][y]]) maze_draft[x][y] = target_room;
             }
         }
 
@@ -395,14 +540,19 @@ struct maze randomized_kruskal(bool verbose, int size, unsigned int direction_op
             print_maze_draft(maze_draft, size);
 
         // Recalculate the total rooms
-        if (is_diagonal)
-        {
-            rooms_counter -= 2;
-        }
-        else
+        if (is_standard)
         {
             rooms_counter -= 1;
         }
+        else if (is_diagonal)
+        {
+            rooms_counter -= 2;
+        }
+        else if (is_letter && selected_direction == LETTER_S)
+        {
+            rooms_counter -= 8;
+        }
+
         if (verbose)
             printf("Total rooms: %d\n", rooms_counter);
 

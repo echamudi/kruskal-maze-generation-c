@@ -15,6 +15,8 @@
 
 #include "print_maze.h"
 #include "randomized_kruskal.h"
+#include "stats.h"
+#include "util.h"
 
 int main(int argc, const char *argv[])
 {
@@ -22,9 +24,9 @@ int main(int argc, const char *argv[])
     // Initialize randomizer
     srand((unsigned)time(NULL));
 
-    int size = 4;
+    int size = 20;
 
-    struct maze maze1 = randomized_kruskal(true, size, 0b00000011);
+    struct maze maze1 = randomized_kruskal(true, size, 0b00000111);
 
     print_maze(maze1.graph, size);
 
@@ -33,5 +35,12 @@ int main(int argc, const char *argv[])
         free(maze1.graph[i]);
     free(maze1.graph);
 
+//    printf("== Standard ==\n");
+//    stats(0b00000001);
+//    printf("== Standard + Diagonal ==\n");
+//    stats(0b00000011);
+//    printf("== Standard + Prioritized S ==\n");
+//    stats(0b00000101);
     return 0;
 }
+

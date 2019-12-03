@@ -51,6 +51,9 @@ void print_direction(int code)
     case LEFT_TOP:
         printf("left top");
         break;
+    case LETTER_S:
+        printf("letter-S");
+        break;
     default:
         printf("ERROR: wrong code");
         break;

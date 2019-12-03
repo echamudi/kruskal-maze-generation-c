@@ -22,7 +22,7 @@ struct maze
     int total_nodes;
 };
 
-const int TOTAL_DIRECTIONS = 12;
+const int TOTAL_DIRECTIONS = 13;
 
 const int TOP_LEFT = 0;
 const int TOP = 1;
@@ -40,8 +40,6 @@ const int LEFT_BOTTOM = 9;
 const int LEFT = 10;
 const int LEFT_TOP = 11;
 
-const int LETTER_E = 70;
-const int LETTER_A = 71;
-const int LETTER_S = 72;
+const int LETTER_S = 12;
 
 #endif /* definitions_h */
