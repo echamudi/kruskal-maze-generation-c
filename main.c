@@ -123,8 +123,12 @@ bool all_unique(int x, int y, int z)
     return result;
 }
 
-unsigned char *available_directions(int x, int y, int **maze_draft, int size)
+unsigned char *available_directions(int x, int y, int **maze_draft, int size, unsigned int options)
 {
+    const unsigned int enable_standard = 0b00000001;
+    const unsigned int enable_diagonal = 0b00000010;
+    const unsigned int enable_letters  = 0b00000100;
+
     int legality_counter = 0;
 
     bool legality[TOTAL_DIRECTIONS] = {false};
@@ -135,84 +139,116 @@ unsigned char *available_directions(int x, int y, int **maze_draft, int size)
     bool near_left_border = x == 0;
 
     // Check top left
-    if (ENABLE_DIAGONAL && !near_top_border && !near_left_border && all_unique(maze_draft[x][y], maze_draft[x][y - 1], maze_draft[x - 1][y - 1]))
+    if ((options & enable_diagonal)
+        && !near_top_border
+        && !near_left_border
+        && all_unique(maze_draft[x][y], maze_draft[x][y - 1], maze_draft[x - 1][y - 1]))
     {
         legality[TOP_LEFT] = true;
         legality_counter++;
     }
 
     // Check top
-    if (!near_top_border && (maze_draft[x][y] != maze_draft[x][y - 1]))
+    if ((options & enable_standard)
+        && !near_top_border
+        && (maze_draft[x][y] != maze_draft[x][y - 1]))
     {
         legality[TOP] = true;
         legality_counter++;
     }
 
     // Check top right
-    if (ENABLE_DIAGONAL && !near_top_border && !near_right_border && all_unique(maze_draft[x][y], maze_draft[x][y - 1], maze_draft[x + 1][y - 1]))
+    if ((options & enable_diagonal)
+        && !near_top_border
+        && !near_right_border
+        && all_unique(maze_draft[x][y], maze_draft[x][y - 1], maze_draft[x + 1][y - 1]))
     {
         legality[TOP_RIGHT] = true;
         legality_counter++;
     }
 
     // Check right top
-    if (ENABLE_DIAGONAL && !near_right_border && !near_top_border && all_unique(maze_draft[x][y], maze_draft[x + 1][y], maze_draft[x + 1][y - 1]))
+    if ((options & enable_diagonal)
+        && !near_right_border
+        && !near_top_border
+        && all_unique(maze_draft[x][y], maze_draft[x + 1][y], maze_draft[x + 1][y - 1]))
     {
         legality[RIGHT_TOP] = true;
         legality_counter++;
     }
 
     // Check right
-    if (!near_right_border && (maze_draft[x][y] != maze_draft[x + 1][y]))
+    if ((options & enable_standard)
+        && !near_right_border
+        && (maze_draft[x][y] != maze_draft[x + 1][y]))
     {
         legality[RIGHT] = true;
         legality_counter++;
     }
 
     // Check right bottom
-    if (ENABLE_DIAGONAL && !near_right_border && !near_bottom_border && all_unique(maze_draft[x][y], maze_draft[x + 1][y], maze_draft[x + 1][y + 1]))
+    if ((options & enable_diagonal)
+        && !near_right_border
+        && !near_bottom_border
+        && all_unique(maze_draft[x][y], maze_draft[x + 1][y], maze_draft[x + 1][y + 1]))
     {
         legality[RIGHT_BOTTOM] = true;
         legality_counter++;
     }
 
     // Check bottom right
-    if (ENABLE_DIAGONAL && !near_bottom_border && !near_right_border && all_unique(maze_draft[x][y], maze_draft[x][y + 1], maze_draft[x + 1][y + 1]))
+    if ((options & enable_diagonal)
+        && !near_bottom_border
+        && !near_right_border
+        && all_unique(maze_draft[x][y], maze_draft[x][y + 1], maze_draft[x + 1][y + 1]))
     {
         legality[BOTTOM_RIGHT] = true;
         legality_counter++;
     }
 
     // Check bottom
-    if (!near_bottom_border && (maze_draft[x][y] != maze_draft[x][y + 1]))
+    if ((options & enable_standard)
+        && !near_bottom_border
+        && (maze_draft[x][y] != maze_draft[x][y + 1]))
     {
         legality[BOTTOM] = true;
         legality_counter++;
     }
 
     // Check bottom left
-    if (ENABLE_DIAGONAL && !near_bottom_border && !near_left_border && all_unique(maze_draft[x][y], maze_draft[x][y + 1], maze_draft[x - 1][y + 1]))
+    if ((options & enable_diagonal)
+        && !near_bottom_border
+        && !near_left_border
+        && all_unique(maze_draft[x][y], maze_draft[x][y + 1], maze_draft[x - 1][y + 1]))
     {
         legality[BOTTOM_LEFT] = true;
         legality_counter++;
     }
 
     // Check left bottom
-    if (ENABLE_DIAGONAL && !near_left_border && !near_bottom_border && all_unique(maze_draft[x][y], maze_draft[x - 1][y], maze_draft[x - 1][y + 1]))
+    if ((options & enable_diagonal)
+        && !near_left_border
+        && !near_bottom_border
+        && all_unique(maze_draft[x][y], maze_draft[x - 1][y], maze_draft[x - 1][y + 1]))
     {
         legality[LEFT_BOTTOM] = true;
         legality_counter++;
     }
 
     // Check left
-    if (!near_left_border && (maze_draft[x][y] != maze_draft[x - 1][y]))
+    if ((options & enable_standard)
+        && !near_left_border
+        && (maze_draft[x][y] != maze_draft[x - 1][y]))
     {
         legality[LEFT] = true;
         legality_counter++;
     }
 
     // Check left top
-    if (ENABLE_DIAGONAL && !near_left_border && !near_top_border && all_unique(maze_draft[x][y], maze_draft[x - 1][y], maze_draft[x - 1][y - 1]))
+    if ((options & enable_diagonal)
+        && !near_left_border
+        && !near_top_border
+        && all_unique(maze_draft[x][y], maze_draft[x - 1][y], maze_draft[x - 1][y - 1]))
     {
         legality[LEFT_TOP] = true;
         legality_counter++;
@@ -235,7 +271,7 @@ unsigned char *available_directions(int x, int y, int **maze_draft, int size)
     return array;
 }
 
-struct maze randomized_kruskal(bool verbose, int size)
+struct maze randomized_kruskal(bool verbose, int size, unsigned int direction_options)
 {
     struct maze result;
 
@@ -289,7 +325,7 @@ struct maze randomized_kruskal(bool verbose, int size)
         x1 = rand() % size;
         y1 = rand() % size;
 
-        unsigned char *directions = available_directions(x1, y1, maze_draft, size);
+        unsigned char *directions = available_directions(x1, y1, maze_draft, size, direction_options);
         unsigned char total_available_directions = directions[0];
 
         // If the selected node has no available direction, re-random
@@ -569,18 +605,12 @@ struct maze randomized_kruskal(bool verbose, int size)
     return result;
 }
 
-void stat()
+void stats()
 {
     int size = 10;
     int trials = 300000;
 
     // Calculate average of passes
-    double avg_passes = 0;
-    double avg_failed_passes = 0;
-    int max_passes = 0;
-    int min_passes = INT_MAX;
-    int max_failed_passes = 0;
-    int min_failed_passes = INT_MAX;
     double avg_deg1_nodes = 0;
     double avg_deg2_nodes = 0;
     double avg_deg3_nodes = 0;
@@ -588,22 +618,11 @@ void stat()
 
     for (int i = 0; i < trials; i++)
     {
-        struct maze my_maze = randomized_kruskal(false, size);
-        avg_passes += (double)my_maze.total_passes / trials;
-        avg_failed_passes += (double)my_maze.total_failed_passes / trials;
+        struct maze my_maze = randomized_kruskal(false, size, 0b11111111);
         avg_deg1_nodes += (double)my_maze.total_deg1_nodes / trials;
         avg_deg2_nodes += (double)my_maze.total_deg2_nodes / trials;
         avg_deg3_nodes += (double)my_maze.total_deg3_nodes / trials;
         avg_deg4_nodes += (double)my_maze.total_deg4_nodes / trials;
-
-        if (max_passes < my_maze.total_passes)
-            max_passes = my_maze.total_passes;
-        if (min_passes > my_maze.total_passes)
-            min_passes = my_maze.total_passes;
-        if (max_failed_passes < my_maze.total_failed_passes)
-            max_failed_passes = my_maze.total_failed_passes;
-        if (min_failed_passes > my_maze.total_failed_passes)
-            min_failed_passes = my_maze.total_failed_passes;
 
         // Free mems
         for (int i = 0; i < size * size; i++)
@@ -611,14 +630,6 @@ void stat()
         free(my_maze.graph);
     }
 
-    printf("Max passes: %d\n", max_passes);
-    printf("Average passes: %lf\n", avg_passes);
-    printf("Min passes: %d\n", min_passes);
-    printf("\n");
-    printf("Max failed passes: %d\n", max_failed_passes);
-    printf("Average failed passes: %lf\n", avg_failed_passes);
-    printf("Min failed passes: %d\n", min_failed_passes);
-    printf("\n");
     printf("Avg deg 1 nodes: %lf\n", avg_deg1_nodes);
     printf("Avg deg 2 nodes: %lf\n", avg_deg2_nodes);
     printf("Avg deg 3 nodes: %lf\n", avg_deg3_nodes);
@@ -633,7 +644,7 @@ int main(int argc, const char *argv[])
 
     int size = 4;
 
-    struct maze maze1 = randomized_kruskal(true, size);
+    struct maze maze1 = randomized_kruskal(true, size, 0b00000001);
 
     print_maze(maze1.graph, size);
 
@@ -641,6 +652,8 @@ int main(int argc, const char *argv[])
     for (int i = 0; i < size * size; i++)
         free(maze1.graph[i]);
     free(maze1.graph);
+
+//    stats();
 
     return 0;
 }
