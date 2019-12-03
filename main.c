@@ -17,6 +17,13 @@
 
 #include "print_maze.h"
 
+struct maze {
+    int total_passes;
+    int total_failed_passes;
+    int size;
+    int ** graph;
+};
+
 const int TOTAL_DIRECTIONS = 12;
 
 const int TOP_LEFT = 0;
@@ -34,8 +41,6 @@ const int BOTTOM_LEFT = 8;
 const int LEFT_BOTTOM = 9;
 const int LEFT = 10;
 const int LEFT_TOP = 11;
-
-const int MAZE_SIZE = 4;
 
 const bool ENABLE_DIAGONAL = true;
 
@@ -85,19 +90,19 @@ void print_direction(int code) {
     }
 }
 
-void print_maze_draft() {
+void print_maze_draft(int size) {
     // Print maze_draft
     printf("Current maze draft:\n");
     printf("\t");
 
-    for (int i = 0; i < MAZE_SIZE; i++) {
+    for (int i = 0; i < size; i++) {
         printf("[%d]\t", i);
     }
     printf("\n");
 
-    for (int x = 0; x < MAZE_SIZE; x++) {
+    for (int x = 0; x < size; x++) {
         printf("[%d]\t", x);
-        for (int y = 0; y < MAZE_SIZE; y++) {
+        for (int y = 0; y < size; y++) {
             printf("%d\t", maze_draft[y][x]);
         }
         printf("\n");
@@ -109,14 +114,14 @@ bool all_unique(int x, int y, int z) {
     return result;
 }
 
-unsigned char * available_directions(int x, int y) {
+unsigned char * available_directions(int x, int y, int size) {
     int legality_counter = 0;
 
     bool legality[TOTAL_DIRECTIONS] = {false};
     
     bool near_top_border = y == 0;
-    bool near_right_border = x == (MAZE_SIZE - 1);
-    bool near_bottom_border = y == (MAZE_SIZE - 1);
+    bool near_right_border = x == (size - 1);
+    bool near_bottom_border = y == (size - 1);
     bool near_left_border = x == 0;
 
     // Check top left
@@ -231,28 +236,28 @@ unsigned char * available_directions(int x, int y) {
     return array;
 }
 
-int ** randomized_kruskal(bool verbose) {
+struct maze randomized_kruskal(bool verbose, int size) {
     // Initialize randomizer
     srand((unsigned) time(NULL));
     
-    const int total_nodes = MAZE_SIZE * MAZE_SIZE;
+    const int total_nodes = size * size;
     
     // Create maze draft
-    maze_draft = (int ** ) calloc(MAZE_SIZE, sizeof(int * ));
-    for (int i = 0; i < MAZE_SIZE; i++) {
-        maze_draft[i] = (int * ) calloc(MAZE_SIZE, sizeof(int));
+    maze_draft = (int ** ) calloc(size, sizeof(int * ));
+    for (int i = 0; i < size; i++) {
+        maze_draft[i] = (int * ) calloc(size, sizeof(int));
     }
     
     // Assign each cell in draft an integer identifier
-    for (int x = 0; x < MAZE_SIZE; x++) {
-        for (int y = 0; y < MAZE_SIZE; y++) {
-            maze_draft[x][y] = x * MAZE_SIZE + y;
+    for (int x = 0; x < size; x++) {
+        for (int y = 0; y < size; y++) {
+            maze_draft[x][y] = x * size + y;
         }
     }
     
     // Print maze_draft
     if (verbose) {
-        print_maze_draft();
+        print_maze_draft(size);
         printf("\n");
     }
 
@@ -276,10 +281,10 @@ int ** randomized_kruskal(bool verbose) {
         int x3 = -1;
         int y3 = -1;
 
-        x1 = rand() % MAZE_SIZE;
-        y1 = rand() % MAZE_SIZE;
+        x1 = rand() % size;
+        y1 = rand() % size;
         
-        unsigned char * directions = available_directions(x1, y1);
+        unsigned char * directions = available_directions(x1, y1, size);
         unsigned char total_available_directions = directions[0];
         
         // If the selected node has no available direction, re-random
@@ -347,7 +352,7 @@ int ** randomized_kruskal(bool verbose) {
                 break;
             default:
                 printf("ERROR: Wrong direction code.");
-                return NULL;
+                exit(1);
         }
         
         // get third node coordinate (if exists)
@@ -375,7 +380,7 @@ int ** randomized_kruskal(bool verbose) {
                     break;
                 default:
                     printf("ERROR: Wrong diagonal direction code.");
-                    return NULL;
+                    exit(1);
             }
         }
 
@@ -392,12 +397,12 @@ int ** randomized_kruskal(bool verbose) {
         }
 
         // Add link in the graph
-        int node1_id = x1 * MAZE_SIZE + y1;
-        int node2_id = x2 * MAZE_SIZE + y2;
+        int node1_id = x1 * size + y1;
+        int node2_id = x2 * size + y2;
         int node3_id = -1;
         
         if (is_diagonal) {
-            node3_id = x3 * MAZE_SIZE + y3;
+            node3_id = x3 * size + y3;
         }
         
         graph[node1_id][node2_id] = 1;
@@ -417,15 +422,15 @@ int ** randomized_kruskal(bool verbose) {
             node3_room = maze_draft[x3][y3];
         }
 
-        for (int x = 0; x < MAZE_SIZE; x++) {
-            for (int y = 0; y < MAZE_SIZE; y++) {
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
                 if (maze_draft[x][y] == node1_room || maze_draft[x][y] == node2_room || maze_draft[x][y] == node3_room)
                     maze_draft[x][y] = node1_room;
             }
         }
         
         // Print maze_draft
-        if (verbose) print_maze_draft();
+        if (verbose) print_maze_draft(size);
 
         // Recalculate the total rooms
         if (is_diagonal) {
@@ -484,24 +489,32 @@ int ** randomized_kruskal(bool verbose) {
     }
 
     // Free mems
-    for(int i = 0; i < MAZE_SIZE; i++)
+    for(int i = 0; i < size; i++)
         free(maze_draft[i]);
     free(maze_draft);
     
-    return graph;
+    struct maze result;
+
+    result.total_passes = pass_number;
+    result.total_failed_passes = failed_pass_number;
+    result.graph = graph;
+
+    return result;
 }
 
 int main(int argc, const char * argv[]) {
     printf("Kruskal's Maze Generation!\n");
 
-    int ** graph = randomized_kruskal(true);
+    int size = 4;
 
-    print_maze(graph, MAZE_SIZE);
+    struct maze maze1 = randomized_kruskal(true, size);
+
+    print_maze(maze1.graph, size);
 
     // Free mems
-    for(int i = 0; i < MAZE_SIZE * MAZE_SIZE; i++)
-        free(graph[i]);
-    free(graph);
+    for(int i = 0; i < size * size; i++)
+        free(maze1.graph[i]);
+    free(maze1.graph);
 
     return 0;
 }
