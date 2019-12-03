@@ -1,4 +1,15 @@
+//
+//  print_maze.h
+//  kruskal-maze-generation-c
+//
+//  Created by Ezzat Chamudi on 12/3/19.
+//  Copyright © 2019 Ezzat Chamudi. All rights reserved.
+//
+
 #include <stdio.h>
+
+#ifndef print_maze_h
+#define print_maze_h
 
 void print_maze(int ** maze_graph, int size) {
     int current_node;
@@ -43,3 +54,5 @@ void print_maze(int ** maze_graph, int size) {
     }
     printf("██\n");
 }
+
+#endif
