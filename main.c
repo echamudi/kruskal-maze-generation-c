@@ -1,6 +1,6 @@
 //
 //  main.c
-//  maze
+//  kruskal-maze-generation-c
 //
 //  Created by Ezzat Chamudi on 11/29/19.
 //  Copyright © 2019 Ezzat Chamudi. All rights reserved.
@@ -14,6 +14,7 @@
 #include <stdbool.h>
 #include <time.h>
 
+#include "definitions.h"
 #include "print_maze.h"
 #include "randomized_kruskal.h"
 #include "stats.h"

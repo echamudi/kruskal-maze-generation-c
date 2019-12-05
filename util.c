@@ -1,15 +1,35 @@
 //
-//  print_direction.h
+//  util.c
 //  kruskal-maze-generation-c
 //
-//  Created by Ezzat Chamudi on 12/3/19.
+//  Created by Ezzat Chamudi on 12/5/19.
 //  Copyright © 2019 Ezzat Chamudi. All rights reserved.
+//  License: Apache-2.0
 //
-#include <stdio.h>
-#include "definitions.h"
 
-#ifndef print_direction_h
-#define print_direction_h
+#include "util.h"
+
+bool all_unique_3(int x, int y, int z)
+{
+    bool result = (x != y) && (y != z) && (z != x);
+    return result;
+}
+
+bool all_unique_array(int length, int array[])
+{
+    for (int i = 0; i < length; i++)
+    {
+        for (int j = 0; j < length; j++)
+        {
+            if (i == j)
+                continue;
+
+            if (array[i] == array[j])
+                return false;
+        }
+    }
+    return true;
+}
 
 void print_direction(int code)
 {
@@ -59,5 +79,3 @@ void print_direction(int code)
         break;
     }
 }
-
-#endif /* print_direction_h */
