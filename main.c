@@ -12,6 +12,7 @@
 #include <sys/time.h>
 #include <limits.h>
 #include <stdbool.h>
+#include <time.h>
 
 #include "print_maze.h"
 #include "randomized_kruskal.h"
