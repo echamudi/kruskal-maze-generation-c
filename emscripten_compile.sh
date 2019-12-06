@@ -11,7 +11,6 @@ emcc \
     \
     -s EXPORTED_FUNCTIONS='[
         "_web_randomized_kruskal",
-        "_randomized_kruskal"
     ]' \
     \
     -s EXTRA_EXPORTED_RUNTIME_METHODS='[

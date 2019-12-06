@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>Emscripten-Generated Code</title>
+  <title>Kruskal Maze Generation</title>
   <style>
     body {
       font-family: arial;
@@ -46,9 +46,9 @@
   <div class="emscripten" id="status">Downloading...</div>
 
   <div id='controls' style="display: none;">
-    <input type="checkbox" id="optionLetterS"> Prioritize letter-S shaped connection<br>
-    <input type="checkbox" id="optionDiagonal"> Allow diagonal connection<br>
     Maze Size <input type="text" id="optionSize"><br>
+    <input type="checkbox" id="optionDiagonal"> Allow diagonal connection<br>
+    <input type="checkbox" id="optionLetterS"> Allow and prioritize letter-S shaped connection<br>
     <input type="button" value="Generate" onclick="generate()">
   </div>
 
@@ -66,20 +66,12 @@
       preRun: [],
       postRun: [],
       print: (function () {
-        var element = document.getElementById('output');
-        if (element) element.innerText = ''; // clear browser cache
+        var outputEl = document.getElementById('output');
+        outputEl.innerText = '';
 
         return function (text) {
           if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
-          // These replacements are necessary if you render to raw HTML
-          //text = text.replace(/&/g, "&amp;");
-          //text = text.replace(/</g, "&lt;");
-          //text = text.replace(/>/g, "&gt;");
-          //text = text.replace('\n', '<br>', 'g');
-          // console.log(text);
-          if (element) {
-            element.innerText += text + "\n";
-          }
+          outputEl.innerText += text + "\n";
         };
       })(),
       printErr: function (text) {
@@ -118,7 +110,6 @@
     };
     Module.setStatus('Downloading...');
     window.onerror = function (event) {
-      // TODO: do not warn on ok events like simulating an infinite loop or exitStatus
       Module.setStatus('Exception thrown, see JavaScript console');
       Module.setStatus = function (text) {
         if (text) Module.printErr('[post-exception status] ' + text);
@@ -151,9 +142,14 @@
       var direction_options = 0b00000001 | optionLetterS | optionDiagonal;
 
       console.log("Size :", optionSize, "direction_options :", direction_options.toString(2));
-      _web_randomized_kruskal(0, optionSize, direction_options);
+      var t0 = performance.now();
+      Module.ccall('web_randomized_kruskal',
+        'number',
+        ['number', 'number'],
+        [optionSize, direction_options]);
+      var t1 = performance.now();
+      console.log("Generated maze in " + (t1 - t0) + " milliseconds.");
     }
-
   </script>
 </body>
 
