@@ -19,3 +19,4 @@ emcc \
         "cwrap"
     ]' \
     \
+    -s TOTAL_MEMORY=536870912
