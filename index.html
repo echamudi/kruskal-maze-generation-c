@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Emscripten-Generated Code</title>
+  <style>
+    body {
+      font-family: arial;
+      margin: 0;
+      padding: none;
+      color: white;
+      background: #3a3a3a;
+    }
+
+    #status {
+      display: inline-block;
+      vertical-align: top;
+      margin-top: 30px;
+      margin-left: 20px;
+      font-weight: bold;
+    }
+
+    #progress {
+      height: 20px;
+      width: 300px;
+    }
+
+    #output {
+      margin: 0 auto;
+      margin-top: 10px;
+      border-left: 0px;
+      border-right: 0px;
+      padding-left: 0px;
+      padding-right: 0px;
+      display: block;
+      font-family: 'Lucida Console', Monaco, monospace;
+      outline: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="emscripten" id="status">Downloading...</div>
+
+  <div id='controls' style="display: none;">
+    <input type="checkbox" id="optionLetterS"> Prioritize letter-S shaped connection<br>
+    <input type="checkbox" id="optionDiagonal"> Allow diagonal connection<br>
+    Maze Size <input type="text" id="optionSize"><br>
+    <input type="button" value="Generate" onclick="generate()">
+  </div>
+
+  <div class="emscripten">
+    <progress value="0" max="100" id="progress" hidden=1></progress>
+  </div>
+
+  <pre id="output"></pre>
+
+  <script type='text/javascript'>
+    var statusElement = document.getElementById('status');
+    var progressElement = document.getElementById('progress');
+
+    var Module = {
+      preRun: [],
+      postRun: [],
+      print: (function () {
+        var element = document.getElementById('output');
+        if (element) element.innerText = ''; // clear browser cache
+
+        return function (text) {
+          if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+          // These replacements are necessary if you render to raw HTML
+          //text = text.replace(/&/g, "&amp;");
+          //text = text.replace(/</g, "&lt;");
+          //text = text.replace(/>/g, "&gt;");
+          //text = text.replace('\n', '<br>', 'g');
+          // console.log(text);
+          if (element) {
+            element.innerText += text + "\n";
+          }
+        };
+      })(),
+      printErr: function (text) {
+        if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+        console.error(text);
+      },
+      setStatus: function (text) {
+        if (!Module.setStatus.last) Module.setStatus.last = { time: Date.now(), text: '' };
+        if (text === Module.setStatus.last.text) return;
+        var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+        var now = Date.now();
+        var controls = document.getElementById('controls');
+        if (m && now - Module.setStatus.last.time < 30) return; // if this is a progress update, skip it if too soon
+        Module.setStatus.last.time = now;
+        Module.setStatus.last.text = text;
+        if (m) {
+          text = m[1];
+          progressElement.value = parseInt(m[2]) * 100;
+          progressElement.max = parseInt(m[4]) * 100;
+          progressElement.hidden = false;
+        } else {
+          progressElement.value = null;
+          progressElement.max = null;
+          progressElement.hidden = true;
+          if (!text) {
+            controls.style.display = 'block';
+          }
+        }
+        statusElement.innerHTML = text;
+      },
+      totalDependencies: 0,
+      monitorRunDependencies: function (left) {
+        this.totalDependencies = Math.max(this.totalDependencies, left);
+        Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies - left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+      }
+    };
+    Module.setStatus('Downloading...');
+    window.onerror = function (event) {
+      // TODO: do not warn on ok events like simulating an infinite loop or exitStatus
+      Module.setStatus('Exception thrown, see JavaScript console');
+      Module.setStatus = function (text) {
+        if (text) Module.printErr('[post-exception status] ' + text);
+      };
+    };
+  </script>
+  <script async type="text/javascript" src="/dist/script.js"></script>
+  <script>
+    var optionLetterSElement = document.getElementById("optionLetterS");
+    var optionDiagonalElement = document.getElementById("optionDiagonal");
+    var optionSizeElement = document.getElementById("optionSize");
+
+    function generate() {
+      document.getElementById('output').innerHTML = '';
+
+      var optionLetterS = 0b00000000;
+      var optionDiagonal = 0b00000000;
+      var optionSize = 5;
+
+      if (optionLetterSElement.checked === true) {
+        optionLetterS = 0b00000100;
+      }
+      if (optionDiagonalElement.checked === true) {
+        optionDiagonal = 0b00000010;
+      }
+      if (!isNaN(parseInt(optionSizeElement.value))) {
+        optionSize = parseInt(optionSizeElement.value);
+      }
+
+      var direction_options = 0b00000001 | optionLetterS | optionDiagonal;
+
+      console.log("Size :", optionSize, "direction_options :", direction_options.toString(2));
+      _web_randomized_kruskal(0, optionSize, direction_options);
+    }
+
+  </script>
+</body>
+
+</html>
