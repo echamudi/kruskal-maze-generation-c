@@ -7,20 +7,9 @@
 //  License: Apache-2.0
 //
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/time.h>
-#include <limits.h>
-#include <stdbool.h>
-#include <time.h>
+#include "web.h"
 
-#include "definitions.h"
-#include "print_maze.h"
-#include "randomized_kruskal.h"
-#include "stats.h"
-#include "util.h"
-
-struct maze web_randomized_kruskal(int size, unsigned int direction_options)
+int web_randomized_kruskal(int size, int direction_options)
 {
     srand((unsigned)time(NULL));
 
@@ -32,6 +21,6 @@ struct maze web_randomized_kruskal(int size, unsigned int direction_options)
     for (int i = 0; i < size * size; i++)
         free(maze1.graph[i]);
     free(maze1.graph);
-    
-    return maze1;
+
+    return 0;
 }
