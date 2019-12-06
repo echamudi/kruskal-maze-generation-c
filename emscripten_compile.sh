@@ -10,7 +10,7 @@ emcc \
     -o ./dist/script.js \
     \
     -s EXPORTED_FUNCTIONS='[
-        "_web_randomized_kruskal",
+        "_web_randomized_kruskal"
     ]' \
     \
     -s EXTRA_EXPORTED_RUNTIME_METHODS='[
