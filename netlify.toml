@@ -1,0 +1,4 @@
+[build]
+  base = "/"
+  publish = "dist/"
+  command = "chmod +x ./netlify.sh && ./netlify.sh"
