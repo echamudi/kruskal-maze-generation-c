@@ -10,17 +10,24 @@ Modified randomized Kruskal's maze generation algorithm written in C.
 - Modified algorithm
     - In each iteration, if it can select S shaped nine adjacent nodes, it will select it. Or, if it can not select S shaped nine adjacent nodes, the algorithm can select L shaped three adjacent nodes that belong to three different group and merge them into one group.
 
-## Running
+## Usage
 
-Compile & running directly from the desktop
+### From Web Browser
+
+Open the following link https://kruskal.netlify.com/
+
+### From Desktop Terminal
+
+Compile using clang & run  directly from the desktop
 
 ```
-clang main.c && ./a.out
+clang main.c
+./a.out
 ```
 
 ## Development
 
-### Compiling & Running in Web Browser
+### Compiling for the Web Browser
 
 We are using emscripten to compile the app to the web browser.
 
