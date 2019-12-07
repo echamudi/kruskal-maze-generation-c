@@ -4,6 +4,7 @@
 //
 //  Created by Ezzat Chamudi on 12/3/19.
 //  Copyright © 2019 Ezzat Chamudi. All rights reserved.
+//  License: Apache-2.0
 //
 
 #ifndef definitions_h
@@ -22,24 +23,29 @@ struct maze
     int total_nodes;
 };
 
-const int TOTAL_DIRECTIONS = 13;
+struct coordinate {
+    unsigned int x;
+    unsigned int y;
+};
 
-const int TOP_LEFT = 0;
-const int TOP = 1;
-const int TOP_RIGHT = 2;
+#define TOTAL_DIRECTIONS 13
 
-const int RIGHT_TOP = 3;
-const int RIGHT = 4;
-const int RIGHT_BOTTOM = 5;
+#define TOP_LEFT 0
+#define TOP 1
+#define TOP_RIGHT 2
 
-const int BOTTOM_RIGHT = 6;
-const int BOTTOM = 7;
-const int BOTTOM_LEFT = 8;
+#define RIGHT_TOP 3
+#define RIGHT 4
+#define RIGHT_BOTTOM 5
 
-const int LEFT_BOTTOM = 9;
-const int LEFT = 10;
-const int LEFT_TOP = 11;
+#define BOTTOM_RIGHT 6
+#define BOTTOM 7
+#define BOTTOM_LEFT 8
 
-const int LETTER_S = 12;
+#define LEFT_BOTTOM 9
+#define LEFT 10
+#define LEFT_TOP 11
+
+#define LETTER_S 12
 
 #endif /* definitions_h */

@@ -1,6 +1,11 @@
 {
     "files.associations": {
         "__locale": "c",
-        "print_maze.h": "c"
+        "print_maze.h": "c",
+        "randomized_kruskal.h": "c",
+        "print_maze_draft.h": "c",
+        "definitions.h": "c",
+        "stats.h": "c",
+        "util.h": "c"
     }
 }
